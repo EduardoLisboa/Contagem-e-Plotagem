@@ -3,7 +3,7 @@
 #include <time.h>
 #include "Libraries/Arvore.h"
 #include "Libraries/InsertionSort.h"
-#define MAX_SIZE 2000
+#define MAX_SIZE 10000
 
 int main()
 {
