@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "Libraries/Arvore.h"
+#include "Libraries/Tree.h"
 #include "Libraries/InsertionSort.h"
 #define MAX_SIZE 10000
 
@@ -9,75 +9,94 @@ int main()
 {
     srand(time(NULL));
 
-    FILE *arquivo;
-    arquivo = fopen("ABBvsAVL.txt", "w+");
+    FILE *file;
+    file = fopen("ABBvsAVL.txt", "w+");
 
-    Arvore *ABB = criar_arvore_vazia();
-    Arvore *AVL = criar_arvore_vazia();
-    long int i = 0;
+    Tree *ABB = create_empty_tree();
+    Tree *AVL = create_empty_tree();
+    long int i = 0, j = 0, k = 5;
 
-    printf("1 - Pior caso da ABB\n2 - Valores aleatorios\n");
-    int opcao;
+    printf("1 - Worst ABB case\n2 - Random values\n");
+    int option;
     for(;;)
     {
-        scanf("%d", &opcao);
+        scanf("%d", &option);
 
-        if(opcao != 1 && opcao != 2)
+        if(option != 1 && option != 2)
         {
-            printf("Select a valid opcao\n");
+            printf("Select a valid option\n");
         }
         else
         {
-            printf("Adicionando...\n");
-            if(opcao == 1)
+            printf("\nAdding...\n");
+            if(option == 1)
             {
                 while (i < MAX_SIZE)
                 {
-                    AVL = adicionar_avl(AVL, i);
-                    ABB = adicionar_abb(ABB, i);
+                    if(i == j)
+                    {
+                        printf("%d%%\n", k);
+                        k += 5;
+                        j += 5 * (MAX_SIZE / 100);
+                    }
+                    AVL = add_in_avl(AVL, i);
+                    ABB = add_in_abb(ABB, i);
                     i++;
                 }
-                printf("Adicao completa!\n");
+                printf("Addition complete!\n\n");
                 break;
             }
-            else if(opcao == 2)
+            else if(option == 2)
             {
                 while (i < MAX_SIZE)
                 {
+                    if(i == j)
+                    {
+                        printf("%d%%\n", k);
+                        k += 5;
+                        j += 5 * (MAX_SIZE / 100);
+                    }
                     long int j = rand()%MAX_SIZE;
-                    AVL = adicionar_avl(AVL, i);                
-                    ABB = adicionar_abb(ABB, j);
+                    AVL = add_in_avl(AVL, i);                
+                    ABB = add_in_abb(ABB, j);
                     i++;
                 }
-                printf("Adicao completa!\n");
+                printf("Addition complete!\n\n");
                 break;
             }
         }
         
     }
 
-    int vetor[MAX_SIZE + 1];
+    int vector[MAX_SIZE + 1];
     i = 0;
     while (i < MAX_SIZE)
     {
-        vetor[i] = rand()%MAX_SIZE;
+        vector[i] = rand()%MAX_SIZE;
         i++;
     }
     i = 0;
 
-    insertion(vetor, MAX_SIZE + 1);
+    insertion(vector, MAX_SIZE + 1);
 
-    fprintf(arquivo, "VALOR\tABB\tAVL\n");
+    fprintf(file, "VALOR\tABB\tAVL\n");
 
-    printf("Buscando...\n");
+    printf("Searching...\n");
+    j = 0, k = 5;
     while (i < MAX_SIZE)
     {
-        buscar_abb(arquivo, ABB, vetor[i], 0);
-        buscar_avl(arquivo, AVL, vetor[i], 0);
+        if(i == j)
+        {
+            printf("%d%%\n", k);
+            k += 5;
+            j += 5 * (MAX_SIZE / 100);
+        }
+        search_abb(file, ABB, vector[i], 0);
+        search_avl(file, AVL, vector[i], 0);
         i++;
     }
-    printf("Busca completa!\n");
+    printf("Search complete!\n");
 
-    fclose(arquivo);
+    fclose(file);
     return 0;
 }
